@@ -1,3 +1,9 @@
 #include <turnkey/base>
 #include <turnkey/lapp>
 
+mahara
+mahara-mediaplayer
+
+php5-xmlrpc
+
+curl
