@@ -17,3 +17,25 @@ a2dissite default
 a2ensite mahara
 a2enmod rewrite
 
+# start services
+/etc/init.d/postgresql start
+
+# create database
+PSQLEXEC="psql -U postgres -d postgres -c"
+su postgres -c "createuser --no-superuser --createdb --no-createrole $DB_USER"
+su postgres -c "createdb --owner $DB_USER $DB_NAME"
+$PSQLEXEC "alter user $DB_USER with encrypted password '$DB_PASS';"
+
+# reconfigure mahara
+debconf-set-selections << EOF
+mahara mahara/db_user string $DB_USER
+mahara mahara/db_name string $DB_NAME
+mahara mahara/db_pass password $DB_PASS
+mahara mahara/db_host string localhost
+mahara mahara/smtphosts string localhost
+EOF
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure mahara
+
+# stop services
+/etc/init.d/postgresql stop
+
