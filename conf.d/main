@@ -99,6 +99,9 @@ $CURL $URL --data "password1=${ADMIN_PASS}1&password2=${ADMIN_PASS}1&email=$MAIL
 
 rm -f /tmp/cookie
 
+# set initial password to default (installer requires numbers)
+/usr/lib/inithooks/bin/mahara.py --email=$ADMIN_MAIL --pass=$ADMIN_PASS
+
 # stop services
 /etc/init.d/postgresql stop
 /etc/init.d/apache2 stop
