@@ -12,3 +12,8 @@ ADMIN_MAIL=admin@example.com
 ln -s /usr/share/mahara /var/www/webroot
 ln -s /etc/mahara /var/www/config
 
+# configure apache
+a2dissite default
+a2ensite mahara
+a2enmod rewrite
+
