@@ -1,0 +1,14 @@
+#!/bin/sh -ex
+
+DB_NAME=mahara
+DB_USER=mahara
+DB_PASS=$(mcookie)
+
+ADMIN_NAME=admin
+ADMIN_PASS=turnkey
+ADMIN_MAIL=admin@example.com
+
+# convenience symlinks
+ln -s /usr/share/mahara /var/www/webroot
+ln -s /etc/mahara /var/www/config
+
