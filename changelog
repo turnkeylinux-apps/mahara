@@ -1,0 +1,37 @@
+turnkey-mahara-12.0 (1) turnkey; urgency=low
+
+  * Initial public release of TurnKey Mahara.
+
+  * Set Mahara admin password and email on firstboot (convenience, security).
+
+  * Regenerates all secrets during installation / firstboot (security).
+
+  * PostgreSQL related:
+
+    - Set PostgreSQL postgres password on firstboot (convenience, security).
+    - Force PostgreSQL to use Unicode/UTF8.
+    - Includes PhpPgAdmin (listening on port 12322 - uses SSL).
+
+  * Apache redirects admin console requests to be served under SSL (security).
+
+  * SSL support out of the box.
+
+  * Includes php-xcache PHP opcode cacher / optimizer (performance).
+
+  * Includes postfix MTA (bound to localhost) for sending of email (e.g.
+    password recovery). Also includes webmin postfix module for convenience.
+
+  * Major component versions
+
+    mahara                  1.2.6-2+squeeze4
+    mahara-mediaplayer      1.2.6-2+squeeze4
+    php5-xmlrpc             5.3.3-7+squeeze13
+    apache2                 2.2.16-6+squeeze7
+    postgresql              8.4.12-0squeeze1
+    phppgadmin              4.2.3-1.1squeeze2
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Alon Swartz <alon@turnkeylinux.org>  Wed, 01 Aug 2012 08:00:00 +0200
+
