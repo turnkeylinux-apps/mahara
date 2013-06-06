@@ -1,6 +1,6 @@
 turnkey-mahara-12.1 (1) turnkey; urgency=low
 
-  * Latest version of Mahara will be installed at build time.
+  * Latest Debian Squeeze package version of Mahara.
 
   * Added phpsh (interative shell for PHP) and php5-cli (generically useful).
 
