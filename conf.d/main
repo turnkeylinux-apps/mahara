@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 DB_NAME=mahara
 DB_USER=mahara
@@ -8,9 +8,16 @@ ADMIN_NAME=admin
 ADMIN_PASS=turnkey
 ADMIN_MAIL=admin@example.com
 
-# convenience symlinks
-ln -s /usr/share/mahara /var/www/webroot
-ln -s /etc/mahara /var/www/config
+SRC=/usr/local/src
+WEBROOT=/var/www/mahara
+DATADIR=/var/lib/mahara/data
+
+# unpack mahara ans set ownership
+tar -zxf $SRC/mahara-*.tar.gz -C $(dirname $WEBROOT)
+mv $WEBROOT-*/htdocs $WEBROOT
+chown -R www-data:www-data $WEBROOT
+rm -rf $WEBROOT-*
+rm $SRC/mahara-*.tar.gz
 
 # configure apache
 a2dissite default
@@ -19,90 +26,38 @@ a2enmod rewrite
 
 # start services
 /etc/init.d/postgresql start
-/etc/init.d/apache2 start
 
 # create database
-PSQLEXEC="psql -U postgres -d postgres -c"
 su postgres -c "createuser --no-superuser --createdb --no-createrole $DB_USER"
-su postgres -c "createdb --owner $DB_USER $DB_NAME"
-$PSQLEXEC "alter user $DB_USER with encrypted password '$DB_PASS';"
-
-# reconfigure mahara
-debconf-set-selections << EOF
-mahara mahara/db_user string $DB_USER
-mahara mahara/db_name string $DB_NAME
-mahara mahara/db_pass password $DB_PASS
-mahara mahara/db_host string localhost
-mahara mahara/smtphosts string localhost
+su postgres -c "createdb --owner $DB_USER -EUTF8 $DB_NAME"
+su postgres -c "psql postgres" << EOF
+alter user $DB_USER with encrypted password '$DB_PASS';
 EOF
-DEBIAN_FRONTEND=noninteractive dpkg-reconfigure mahara
 
-# curl install
-CURL="curl -c /tmp/cookie -b /tmp/cookie -k"
+# create data directory and configuration
+mkdir -p $DATADIR
+chown -R www-data:www-data $(dirname $DATADIR)
 
-URL="https://127.0.0.1/admin/upgrade.php"
-$CURL $URL --data ""
+cat > $WEBROOT/config.php <<EOF
+<?php
+\$cfg = new StdClass;
+\$cfg->dbtype = 'postgres8';
+\$cfg->dbhost = 'localhost';
+\$cfg->dbport = null;
+\$cfg->dbname = '$DB_NAME';
+\$cfg->dbuser = '$DB_USER';
+\$cfg->dbpass = '$DB_PASS';
+\$cfg->dbprefix = '';
+\$cfg->dataroot = '$DATADIR';
+\$cfg->emailcontact = '';
+EOF
+chown www-data:www-data $WEBROOT/config.php
+chmod 640 $WEBROOT/config.php
 
-URL="https://127.0.0.1/admin/upgrade.json.php?sesskey=&name="
-$CURL ${URL}core
-$CURL ${URL}firstcoredata
-$CURL ${URL}localpreinst
-$CURL ${URL}artefact.blog
-$CURL ${URL}artefact.resume
-$CURL ${URL}artefact.internal
-$CURL ${URL}artefact.file
-$CURL ${URL}auth.xmlrpc
-$CURL ${URL}auth.internal
-$CURL ${URL}auth.ldap
-$CURL ${URL}auth.imap
-$CURL ${URL}auth.none
-$CURL ${URL}auth.saml
-$CURL ${URL}notification.emaildigest
-$CURL ${URL}notification.internal
-$CURL ${URL}notification.email
-$CURL ${URL}search.solr
-$CURL ${URL}search.internal
-$CURL ${URL}blocktype.blog%2Fblogpost
-$CURL ${URL}blocktype.file%2Finternalmedia
-$CURL ${URL}blocktype.file%2Fimage
-$CURL ${URL}blocktype.resume%2Fresumefield
-$CURL ${URL}blocktype.blog%2Frecentposts
-$CURL ${URL}blocktype.file%2Fhtml
-$CURL ${URL}blocktype.internal%2Fcontactinfo
-$CURL ${URL}blocktype.internal%2Fprofileinfo
-$CURL ${URL}blocktype.file%2Ffolder
-$CURL ${URL}blocktype.myfriends
-$CURL ${URL}blocktype.wall
-$CURL ${URL}blocktype.externalfeed
-$CURL ${URL}blocktype.textbox
-$CURL ${URL}blocktype.creativecommons
-$CURL ${URL}blocktype.file%2Ffiledownload
-$CURL ${URL}blocktype.myviews
-$CURL ${URL}blocktype.externalvideo
-$CURL ${URL}blocktype.mygroups
-$CURL ${URL}blocktype.blog%2Fblog
-$CURL ${URL}blocktype.resume%2Fentireresume
-$CURL ${URL}interaction.forum
-$CURL ${URL}grouptype.standard
-$CURL ${URL}grouptype.course
-$CURL ${URL}import.leap
-$CURL ${URL}import.file
-$CURL ${URL}export.leap
-$CURL ${URL}export.html
-$CURL ${URL}lastcoredata
-$CURL ${URL}localpostinst
-
-URL="https://127.0.0.1/"
-EMAIL=$(echo $ADMIN_MAIL | sed s/@/%40/)
-SESSKEY=$($CURL -s $URL |grep usf_sesskey |sed "s|.*value=\"||" | sed "s|\">||")
-$CURL $URL --data "password1=${ADMIN_PASS}1&password2=${ADMIN_PASS}1&email=$MAIL&submit=Processing+...&sesskey=$SESSKEY&pieform_requiredfields="
-
-rm -f /tmp/cookie
-
-# set initial password to default (installer requires numbers)
-/usr/lib/inithooks/bin/mahara.py --email=$ADMIN_MAIL --pass=$ADMIN_PASS
+# install mahara
+cd $WEBROOT
+su www-data -c "php admin/cli/install.php -p='$ADMIN_PASS' -e=$ADMIN_MAIL"
 
 # stop services
 /etc/init.d/postgresql stop
-/etc/init.d/apache2 stop
 
