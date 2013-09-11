@@ -7,10 +7,13 @@ Option:
 
 """
 
+import re
 import sys
 import getopt
-import hashlib
+
+import crypt
 import random
+import hashlib
 
 from dialog_wrapper import Dialog
 from pgsqlconf import PostgreSQL
@@ -54,8 +57,19 @@ def main():
             "Enter email address for the Mahara 'admin' account.",
             "admin@example.com")
 
+    sitesalt = ""
+    for line in file("/var/www/mahara/config.php", "r").readlines():
+        m = re.match(r"\$cfg->passwordsaltmain = '(.*)';", line.strip())
+        if m:
+            sitesalt = m.groups()[0]
+
     salt = hashlib.sha1(str(random.random())).hexdigest()[:8]
+    fullsalt = hashlib.md5(sitesalt + salt).hexdigest()[:16]
+
+    alg = "$6$"
     hash = hashlib.sha1(salt + password).hexdigest()
+    hash = crypt.crypt(hash, alg + fullsalt)
+    hash = alg + hash[len(alg)+len(fullsalt):]
 
     p = PostgreSQL(database='mahara')
     p.execute('UPDATE usr SET salt=\'%s\' WHERE username=\'admin\';' % salt)
