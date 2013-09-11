@@ -6,17 +6,17 @@ NameVirtualHost *:443
     ServerAdmin webmaster@localhost
     RewriteEngine On
     RewriteRule ^/admin(.*) https://%{SERVER_NAME}/admin$1 [R,L]
-    DocumentRoot /usr/share/mahara/
+    DocumentRoot /var/www/mahara/
 </VirtualHost>
 
 <VirtualHost *:443>
     SSLEngine on
     SSLCertificateFile /etc/ssl/certs/cert.pem
     ServerAdmin webmaster@localhost
-    DocumentRoot /usr/share/mahara/
+    DocumentRoot /var/www/mahara/
 </VirtualHost>
 
-<Directory /usr/share/mahara/>
+<Directory /var/www/mahara/>
     Options +FollowSymLinks
     AllowOverride All
     order allow,deny
