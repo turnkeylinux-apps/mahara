@@ -50,6 +50,7 @@ cat > $WEBROOT/config.php <<EOF
 \$cfg->dbprefix = '';
 \$cfg->dataroot = '$DATADIR';
 \$cfg->emailcontact = '';
+\$cfg->passwordsaltmain = '$(mcookie)$(mcookie)';
 EOF
 chown www-data:www-data $WEBROOT/config.php
 chmod 640 $WEBROOT/config.php
