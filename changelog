@@ -1,12 +1,24 @@
 turnkey-mahara-13.0 (1) turnkey; urgency=low
 
-  * Please refer to turnkey-core's changelog for changes common to all
-    appliances, as well as the following git logs:
-    
-    - https://github.com/turnkeylinux/common
-    - https://github.com/turnkeylinux-apps/mahara
+  * Mahara:
 
- -- Alon Swartz <alon@turnkeylinux.org>  Tue, 06 Aug 2013 15:37:33 +0300
+    - Installed from upstream source (package no longer available) [#71].
+    - Added passwordsaltmain to config (security)
+    - Updated inithook secret regeneration and password encryption.
+    - Added cron job configuration
+
+  * PostgreSQL:
+
+    - Removed connections over local unix sockets trust (security).
+
+  * Upstream source component versions:
+
+    mahara          1.7.2
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Alon Swartz <alon@turnkeylinux.org>  Thu, 10 Oct 2013 18:17:36 +0300
 
 turnkey-mahara-12.1 (1) turnkey; urgency=low
 

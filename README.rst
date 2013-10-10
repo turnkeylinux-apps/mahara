@@ -12,8 +12,7 @@ and on top of that:
 
 - Mahara configurations:
    
-   - Installed and auto-maintained through the package management system
-     (mahara, mahara-mediaplayer packages)
+    - Installed from upstream source code to /var/www/mahara.
 
 - SSL support out of the box.
 - `phpPgAdmin`_ administration frontend for PostgreSQL (listening on
