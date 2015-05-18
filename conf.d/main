@@ -20,7 +20,7 @@ rm -rf $WEBROOT-*
 rm $SRC/mahara-*.tar.gz
 
 # configure apache
-a2dissite default
+a2dissite 000-default
 a2ensite mahara
 a2enmod rewrite
 
