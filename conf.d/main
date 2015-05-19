@@ -20,7 +20,7 @@ rm -rf $WEBROOT-*
 rm $SRC/mahara-*.tar.gz
 
 # configure apache
-a2dissite default
+a2dissite 000-default
 a2ensite mahara
 a2enmod rewrite
 
@@ -57,12 +57,22 @@ chmod 640 $WEBROOT/config.php
 
 # install mahara
 cd $WEBROOT
-su www-data -c "php admin/cli/install.php -p='$ADMIN_PASS' -e=$ADMIN_MAIL"
+su www-data -s /bin/sh -c "php admin/cli/install.php -p='$ADMIN_PASS' -e=$ADMIN_MAIL"
 
 # setup cron job
 echo "
-* * * * * www-data php $WEBROOT/lib/cron.php >/dev/null 2>&1
-" | crontab -u root -
+SHELL=/bin/bash
+
+* * * * * php $WEBROOT/lib/cron.php >/dev/null 2>&1
+" | crontab -u www-data -
+
+# tweak config
+su postgres -c "psql mahara" << EOF
+update config set value = 'localhost' where field = 'smtphosts';
+update config set value = '25' where field = 'smtpport';
+update config set value = 'TurnKey Mahara' where field = 'sitename';
+insert into config values('noreplyaddress', 'noreply@example.com');
+EOF
 
 # stop services
 /etc/init.d/postgresql stop
