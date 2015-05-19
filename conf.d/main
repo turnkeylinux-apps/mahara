@@ -61,15 +61,17 @@ su www-data -s /bin/sh -c "php admin/cli/install.php -p='$ADMIN_PASS' -e=$ADMIN_
 
 # setup cron job
 echo "
-* * * * * www-data php $WEBROOT/lib/cron.php >/dev/null 2>&1
-" | crontab -u root -
+SHELL=/bin/bash
+
+* * * * * php $WEBROOT/lib/cron.php >/dev/null 2>&1
+" | crontab -u www-data -
 
 # tweak config
 su postgres -c "psql mahara" << EOF
-update config set value = replace(value, 'http', 'https') where field = 'wwwroot';
 update config set value = 'localhost' where field = 'smtphosts';
 update config set value = '25' where field = 'smtpport';
-update config set value = 'noreply@example.com' where field = 'noreplyaddress';
+update config set value = 'TurnKey Mahara' where field = 'sitename';
+insert into config values('noreplyaddress', 'noreply@example.com');
 EOF
 
 # stop services
