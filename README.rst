@@ -15,7 +15,7 @@ and on top of that:
     - Installed from upstream source code to /var/www/mahara.
 
 - SSL support out of the box.
-- `phpPgAdmin`_ administration frontend for PostgreSQL (listening on
+- `Adminer`_ administration frontend for PostgreSQL (listening on
   port 12322 - uses SSL).
 - Postfix MTA (bound to localhost) to allow sending of email (e.g.,
   password recovery).
@@ -31,4 +31,4 @@ Credentials *(passwords set at first boot)*
 
 .. _Mahara: https://mahara.org/
 .. _TurnKey Core: http://www.turnkeylinux.org/core
-.. _phpPgAdmin: http://phppgadmin.sourceforge.net/
+.. _Adminer: http://www.adminer.org/
