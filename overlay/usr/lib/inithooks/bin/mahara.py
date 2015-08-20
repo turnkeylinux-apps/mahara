@@ -10,6 +10,7 @@ Option:
 import re
 import sys
 import getopt
+import inithooks_cache
 
 import crypt
 import random
@@ -56,6 +57,8 @@ def main():
             "Mahara Email",
             "Enter email address for the Mahara 'admin' account.",
             "admin@example.com")
+
+    inithooks_cache.write('APP_EMAIL', email)
 
     sitesalt = ""
     for line in file("/var/www/mahara/config.php", "r").readlines():
