@@ -9,6 +9,10 @@ turnkey-mahara-14.0 (1) turnkey; urgency=low
   * Upstream source component versions:
 
     mahara          15.04.0 (new versioning, the equivalent of 1.11)
+ 
+  * Replaced PHPPgAdmin with Adminer
+  
+  * Hardened default SSL settings
 
   * Note: Please refer to turnkey-core's changelog for changes common to all
     appliances. Here we only describe changes specific to this appliance.
