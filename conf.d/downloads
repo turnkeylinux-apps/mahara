@@ -5,8 +5,8 @@ dl() {
     cd $2; curl -L -f -O $PROXY $1; cd -
 }
 
-VERSION="15.04.0.tar.gz"
-URL="https://launchpad.net/mahara/15.04/15.04.0/+download/mahara-$VERSION"
+VERSION="17.04"
+URL="https://launchpad.net/mahara/$VERSION/$VERSION.2/+download/mahara-$VERSION.2.tar.gz"
 
 dl $URL /usr/local/src
 
