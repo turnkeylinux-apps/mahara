@@ -6,7 +6,8 @@ dl() {
 }
 
 VERSION="17.04"
-URL="https://launchpad.net/mahara/$VERSION/$VERSION.2/+download/mahara-$VERSION.2.tar.gz"
+FULL_VERSION="$VERSION.2"
+URL="https://launchpad.net/mahara/$VERSION/$FULL_VERSION/+download/mahara-$FULL_VERSION.tar.gz"
 
 dl $URL /usr/local/src
 
