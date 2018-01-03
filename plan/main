@@ -1,7 +1,8 @@
 #include <turnkey/base>
 #include <turnkey/lapp>
 
-php5-gd
-php5-curl
-php5-xmlrpc
-
+php-gd
+php-curl
+php-xml
+php-xmlrpc
+php-mbstring
