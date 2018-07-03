@@ -2,6 +2,14 @@ turnkey-mahara-15.0 (1) turnkey; urgency=low
 
   * Upgraded to latest stable version of Mahara (v18.04)
 
+  * Install Adminer directly from stretch/main repo
+
+  * Includes PHP7.0 (installed from Debian repos)
+
+  * Updated PHP default settings
+
+  * Remove phpsh (no longer maintained)
+
   * Note: Please refer to turnkey-core's changelog for changes common to all
     appliances. Here we only describe changes specific to this appliance.
 

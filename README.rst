@@ -25,7 +25,7 @@ Credentials *(passwords set at first boot)*
 -------------------------------------------
 
 -  Webmin, SSH: username **root**
--  PostgreSQL, phpPgAdmin: username **postgres**
+-  PostgreSQL, Adminer: username **postgres**
 -  Mahara: username **admin**
 
 
