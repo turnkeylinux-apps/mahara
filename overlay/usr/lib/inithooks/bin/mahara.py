@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Set Mahara admin password and email
 
 Option:
@@ -21,16 +21,16 @@ from pgsqlconf import PostgreSQL
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "h",
                                        ['help', 'pass=', 'email='])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     password = ""
@@ -61,26 +61,27 @@ def main():
     inithooks_cache.write('APP_EMAIL', email)
 
     sitesalt = ""
-    for line in file("/var/www/mahara/config.php", "r").readlines():
-        m = re.match(r"\$cfg->passwordsaltmain = '(.*)';", line.strip())
-        if m:
-            sitesalt = m.groups()[0]
+    with open('/var/www/mahara/config.php', 'r') as fob:
+        for line in fob:
+            m = re.match(r"\$cfg->passwordsaltmain = '(.*)';", line.strip())
+            if m:
+                sitesalt = m.groups()[0]
 
-    salt = hashlib.sha1(str(random.random())).hexdigest()[:8]
-    fullsalt = hashlib.md5(sitesalt + salt).hexdigest()[:16]
+    salt = hashlib.sha1(str(random.random()).encode()).hexdigest()[:8]
+    fullsalt = hashlib.md5((sitesalt + salt).encode()).hexdigest()[:16]
 
     alg = "$6$"
-    hash = hashlib.sha1(salt + password).hexdigest()
+    hash = hashlib.sha1((salt + password).encode()).hexdigest()
     hash = crypt.crypt(hash, alg + fullsalt)
     hash = alg + hash[len(alg)+len(fullsalt):]
 
     p = PostgreSQL(database='mahara')
-    p.execute('UPDATE usr SET salt=\'%s\' WHERE username=\'admin\';' % salt)
-    p.execute('UPDATE usr SET password=\'%s\' WHERE username=\'admin\';' % hash)
-    p.execute('UPDATE usr SET passwordchange=0 WHERE username=\'admin\';')
-    p.execute('UPDATE usr SET email=\'%s\' WHERE username=\'admin\';' % email)
-    p.execute('UPDATE artefact SET title=\'%s\' WHERE artefacttype=\'email\';' % email)
-    p.execute('UPDATE artefact_internal_profile_email SET email=\'%s\' WHERE owner=1;' % email)
+    p.execute(('UPDATE usr SET salt=\'%s\' WHERE username=\'admin\';' % salt).encode())
+    p.execute(('UPDATE usr SET password=\'%s\' WHERE username=\'admin\';' % hash).encode())
+    p.execute(('UPDATE usr SET passwordchange=0 WHERE username=\'admin\';').encode())
+    p.execute(('UPDATE usr SET email=\'%s\' WHERE username=\'admin\';' % email).encode())
+    p.execute(('UPDATE artefact SET title=\'%s\' WHERE artefacttype=\'email\';' % email).encode())
+    p.execute(('UPDATE artefact_internal_profile_email SET email=\'%s\' WHERE owner=1;' % email).encode())
 
 
 if __name__ == "__main__":
