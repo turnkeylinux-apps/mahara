@@ -23,6 +23,7 @@ rm $SRC/mahara-*.tar.gz
 a2dissite 000-default
 a2ensite mahara
 a2enmod rewrite
+a2enmod headers
 
 # start services
 /etc/init.d/postgresql start
@@ -41,7 +42,7 @@ chown -R www-data:www-data $(dirname $DATADIR)
 cat > $WEBROOT/config.php <<EOF
 <?php
 \$cfg = new StdClass;
-\$cfg->dbtype = 'postgres8';
+\$cfg->dbtype = 'postgres';
 \$cfg->dbhost = 'localhost';
 \$cfg->dbport = null;
 \$cfg->dbname = '$DB_NAME';
