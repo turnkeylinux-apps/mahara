@@ -5,9 +5,11 @@ dl() {
     cd $2; curl -L -f -O $PROXY $1; cd -
 }
 
-VERSION="21.10"
-FULL_VERSION="$VERSION.0"
-URL="https://launchpad.net/mahara/$VERSION/$FULL_VERSION/+download/mahara-$FULL_VERSION.tar.gz"
+VERSION="22.04"
+SUBVERSION="3"
+FULL_VERSION="$VERSION.$SUBVERSION"
+URL="https://github.com/MaharaProject/mahara/archive/refs/tags/$FULL_VERSION_RELEASE.tar.gz"
+# URL="https://launchpad.net/mahara/$VERSION/$FULL_VERSION/+download/mahara-$FULL_VERSION.tar.gz"
 
 dl $URL /usr/local/src
 
