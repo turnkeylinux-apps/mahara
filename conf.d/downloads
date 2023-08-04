@@ -5,6 +5,8 @@ dl() {
     cd $2; curl -L -f -O $PROXY $1; cd -
 }
 
-URL="https://github.com/MaharaProject/mahara/archive/refs/tags/22.04.3_RELEASE.tar.gz"
+VERSION="21.10"
+FULL_VERSION="$VERSION.5"
+URL="https://github.com/MaharaProject/mahara/archive/refs/tags/21.10.5_RELEASE.tar.gz"
 
 dl $URL /usr/local/src
