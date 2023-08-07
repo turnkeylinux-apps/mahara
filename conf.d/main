@@ -13,11 +13,11 @@ WEBROOT=/var/www/mahara
 DATADIR=/var/lib/mahara/data
 
 # unpack mahara ans set ownership
-tar -zxf $SRC/21.10.5_RELEASE.tar.gz -C $(dirname $WEBROOT)
+tar -zxf $SRC/22.10.0_RELEASE.tar.gz -C $(dirname $WEBROOT)
 mv $WEBROOT-*/htdocs $WEBROOT
 chown -R www-data:www-data $WEBROOT
 rm -rf $WEBROOT-*
-rm $SRC/21.10.5_RELEASE.tar.gz
+rm $SRC/22.10.0_RELEASE.tar.gz
 
 # configure apache
 a2dissite 000-default
