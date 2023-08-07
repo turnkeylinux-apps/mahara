@@ -6,3 +6,4 @@ php-curl
 php-xml
 php-xmlrpc
 php-mbstring
+php-intl

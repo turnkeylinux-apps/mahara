@@ -2,6 +2,8 @@ turnkey-mahara-18 (1) turnkey; urgency=low
 
   * Install latest community version of Mahara: 22.04.3 (see https://mahara.org/interaction/forum/topic.php?id=9290&post36681).
 
+  * Thanks @OnGle for the hint on the version.
+
   * Re-build on TurnKey Linux 18 (Debian 12 'bookworm')
 
   * Note: Please refer to turnkey-core's changelog for changes common to all
