@@ -7,3 +7,8 @@ php-xml
 php-xmlrpc
 php-mbstring
 php-intl
+
+
+// only required for source install
+npm
+make
