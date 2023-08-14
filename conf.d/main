@@ -12,12 +12,19 @@ SRC=/usr/local/src
 WEBROOT=/var/www/mahara
 DATADIR=/var/lib/mahara/data
 
+# build css
+npm install -g gulp
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+. ~/.nvm/nvm.sh
+cd $SRC/mahara
+make css
+rm -r ~/.nvm
+apt purge npm --autoremove --assume-yes
+
 # unpack mahara ans set ownership
-tar -zxf $SRC/mahara-*.tar.gz -C $(dirname $WEBROOT)
-mv $WEBROOT-*/htdocs $WEBROOT
+mv $SRC/mahara/htdocs $WEBROOT
 chown -R www-data:www-data $WEBROOT
-rm -rf $WEBROOT-*
-rm $SRC/mahara-*.tar.gz
+#rm -r $SRC/mahara
 
 # configure apache
 a2dissite 000-default

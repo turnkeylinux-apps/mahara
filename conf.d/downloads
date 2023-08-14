@@ -1,13 +1,4 @@
 #!/bin/bash -ex
 
-dl() {
-    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-    cd $2; curl -L -f -O $PROXY $1; cd -
-}
-
-VERSION="21.10"
-FULL_VERSION="$VERSION.0"
-URL="https://launchpad.net/mahara/$VERSION/$FULL_VERSION/+download/mahara-$FULL_VERSION.tar.gz"
-
-dl $URL /usr/local/src
-
+VERSION="22.10"
+git clone 'https://git.mahara.org/mahara/mahara' -b "${VERSION}_STABLE" /usr/local/src/mahara
